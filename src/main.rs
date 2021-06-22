@@ -88,6 +88,27 @@ fn main() {
                                         ]
                                     }).to_string()
                                 );
+                            } else {
+                                let new = &events[0];
+                                let new_json = new.get::<&str, JSONValue>("object");
+
+                                if new_json["season"].as_i64().unwrap_or(20) < 15 {
+                                    let new_json_pretty = serde_json::to_string_pretty(&new_json).unwrap();
+
+                                    tx.send(json!({
+                                        "username": username,
+                                        "embeds": [
+                                                {
+                                                    "title": format!("noticed new event {} at {}",
+                                                                new.get::<&str,Uuid>("doc_id").to_string(),
+                                                                Utc.timestamp(new.get::<&str,i64>("observed") / 1000,0).to_rfc2822()
+                                                            ),
+                                                    "description": format!("```json\n{}\n```",new_json_pretty)
+                                                }
+                                            ]
+                                        }).to_string()
+                                    );
+                                }
                             }
                         }
                         Err(e) => {
