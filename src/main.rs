@@ -119,6 +119,7 @@ fn main() {
             }
             Err(e) => {
                 error!("postgres why >: {:?}", e);
+                panic!("{:?}",e);
             }
         }
     }
