@@ -31,7 +31,14 @@ fn main() {
                       .header("Content-Type","application/json")
                       .body(message.clone())
                       .send() {
-                          Ok(_) => {},
+                          Ok(resp) => {
+                              if resp.status() == StatusCode::TOO_MANY_REQUESTS {
+                                  if let Some(time_left) = resp.headers().get("X-RateLimit-Reset-After") {
+                                      let secs = time_left.parse::<f64>().unwrap();
+                                      thread::sleep(Duration::from_secs_f64(secs));
+                                  }
+                              }
+                          },
                           Err(e) => {
                               error!("couldn't wobhook: {:?}",e);
                           }
