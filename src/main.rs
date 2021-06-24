@@ -8,6 +8,8 @@ use std::thread;
 use std::time::{Duration, Instant};
 use uuid::Uuid;
 use std::sync::mpsc;
+use reqwest::StatusCode;
+
 
 fn main() {
     env_logger::init();
@@ -34,7 +36,7 @@ fn main() {
                           Ok(resp) => {
                               if resp.status() == StatusCode::TOO_MANY_REQUESTS {
                                   if let Some(time_left) = resp.headers().get("X-RateLimit-Reset-After") {
-                                      let secs = time_left.parse::<f64>().unwrap();
+                                      let secs = time_left.to_str().unwrap().parse::<f64>().unwrap();
                                       thread::sleep(Duration::from_secs_f64(secs));
                                   }
                               }
