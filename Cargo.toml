@@ -22,3 +22,11 @@ features = ["json","blocking"]
 [dependencies.uuid]
 version = "0.8"
 features = ["v4"]
+
+[[bin]]
+name = "eventshook"
+path = "src/events.rs"
+
+[[bin]]
+name = "tomebot"
+path = "src/tome.rs"

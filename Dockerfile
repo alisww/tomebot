@@ -43,5 +43,6 @@ RUN apt-get update && \
     apt-get install wget -y
 
 COPY --from=build /usr/local/cargo/bin/tomebot .
+COPY --from=build /usr/local/cargo/bin/eventshook .
 USER 1000
 CMD ["./tomebot"]
